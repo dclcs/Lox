@@ -1,16 +1,12 @@
 package lox;
 
-import lox.Expr.Binary;
-
-import java.beans.Expression;
-
 public class AstPrinter implements Expr.Visitor<String>{
     String print(Expr expr) {
         return expr.accept(this);
     }
 
     @Override
-    public String visitBinaryExpr(Binary expr) {
+    public String visitBinaryExpr(Expr.Binary expr) {
         return parenthesize(expr.operator.lexeme, expr.left, expr.right);
     }
 
@@ -42,7 +38,7 @@ public class AstPrinter implements Expr.Visitor<String>{
     }
 
     public static void main(String[] args) {
-        Expr expression = new Binary(
+        Expr expression = new Expr.Binary(
           new Expr.Unary(
                   new Token(TokenType.MINUS, "-", null, 1),
                   new Expr.Literal(123)
