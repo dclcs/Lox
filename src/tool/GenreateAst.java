@@ -13,7 +13,7 @@ public class GenreateAst {
         }
 
         String outputDir = args[0];
-
+        /// className, constructor parameters
         defineAst(outputDir, "Expr", Arrays.asList(
             "Binary   : Expr left, lox.Token operator, Expr right",
             "Grouping : Expr expression",
