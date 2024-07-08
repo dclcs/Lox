@@ -5,7 +5,7 @@ import java.io.PrintWriter;
 import java.util.Arrays;
 import java.util.List;
 
-public class GenreateAst {
+public class GenerateAst {
     public static void main(String[] args) throws IOException {
         if (args.length != 1) {
             System.out.println("USage: generate_asst <output directory");
@@ -15,10 +15,19 @@ public class GenreateAst {
         String outputDir = args[0];
         /// className, constructor parameters
         defineAst(outputDir, "Expr", Arrays.asList(
+            "Assignment  : Token name, Expr value",
             "Binary   : Expr left, lox.Token operator, Expr right",
             "Grouping : Expr expression",
             "Literal  : Object value",
-            "Unary    : lox.Token operator, Expr right"
+            "Unary    : Token operator, Expr right",
+            "Variable : Token name"
+        ));
+
+        defineAst(outputDir, "Stmt", Arrays.asList(
+            "Block      : List<Stmt> statements",
+            "Expression : Expr expression",
+            "Print      : Expr expression",
+            "Var        : Token name, Expr initializer"
         ));
     }
 
@@ -29,7 +38,7 @@ public class GenreateAst {
         String path = outputDir + "/" + baseName + ".java";
         PrintWriter writer = new PrintWriter(path, "UTF-8");
 
-        writer.println("package com.craftinginterpreters.lox;");
+        writer.println("package lox;");
         writer.println();
         writer.println("import java.util.List;");
         writer.println();
