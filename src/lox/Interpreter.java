@@ -88,6 +88,18 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void>{
         return value;
     }
 
+    @Override
+    public Object visitLogicalExpr(Expr.Logical expr) {
+        Object left = evaluate(expr.left);
+
+        if (expr.operator.type == TokenType.OR) {
+            if (isTrusty(left)) return left;
+        } else {
+            if (!isTrusty(left)) return left;
+        }
+        return evaluate(expr.right);
+    }
+
     private boolean isTrusty(Object object) {
         if (object == null) return false;
         if (object instanceof Boolean) return (boolean) object;
@@ -120,6 +132,25 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void>{
     @Override
     public Void visitBlockStmt(Stmt.Block stmt) {
         executeBlock(stmt.statements, new Environment(environment));
+        return null;
+    }
+
+    @Override
+    public Void visitIfStmt(Stmt.If stmt) {
+        if (isTrusty(evaluate(stmt.condition))) {
+            execute(stmt.thenBranch);
+        } else if (stmt.elseBranch != null) {
+            execute(stmt.elseBranch);
+        }
+
+        return null;
+    }
+
+    @Override
+    public Void visitWhileStmt(Stmt.While stmt) {
+        while (isTrusty(evaluate(stmt.condition))) {
+            execute(stmt.body);
+        }
         return null;
     }
 
