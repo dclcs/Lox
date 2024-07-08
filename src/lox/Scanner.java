@@ -143,7 +143,7 @@ public class Scanner {
         while (isAlphaNumeric(peek())) advance();
         String text = source.substring(start, current);
         TokenType type = keywords.get(text);
-        if (type != null) type = TokenType.IDENTIFIER;
+        if (type == null) type = TokenType.IDENTIFIER;
         addToken(type);
     }
 
