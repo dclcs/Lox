@@ -1,10 +1,9 @@
-var a = "global";
-{
-  fun showA() {
-    print a;
+class Circle {
+  init(radius) {
+    this.radius = radius;
   }
 
-  showA();
-  var a = "block";
-  showA();
 }
+
+var circle = Circle(4);
+print circle.radius;
