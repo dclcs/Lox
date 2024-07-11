@@ -15,6 +15,7 @@ typedef struct {
     uint8_t* ip; //instruction pointer
     Value stack[STACK_MAX];
     Value* stackTop;
+    Obj* objects;
 } VM;
 
 typedef enum {
