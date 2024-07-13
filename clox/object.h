@@ -7,6 +7,7 @@
 
 #include "common.h"
 #include "value.h"
+#include "table.h"
 
 #define OBJ_TYPE(value)        (AS_OBJ(value)->type)
 
@@ -23,6 +24,7 @@ struct ObjString {
     Obj obj;
     int length;
     char* chars;
+    uint32_t hash;
 };
 
 #define IS_STRING(value)       isObjType(value, OBJ_STRING)
@@ -33,13 +35,12 @@ static inline bool isObjType(Value value, ObjType type) {
     return IS_OBJ(value) && AS_OBJ(value)->type == type;
 }
 
-
-
 ObjString* copyString(const char* chars, int length);
 #define ALLOCATE_OBJ(type, objectType) \
     (type*)allocateObject(sizeof(type), objectType)
 
 void printObject(Value value);
 ObjString* takeString(char* chars, int length);
-
+ObjString* tableFindString(Table* table, const char* chars,
+                           int length, uint32_t hash);
 #endif //CLOX_OBJECT_H
