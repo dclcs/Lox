@@ -13,7 +13,7 @@ typedef struct {
     bool panicMode;
 } Parser;
 
-
+#define UINT8_COUNT (UINT8_MAX + 1)
 bool compile(const char* source, Chunk* chunk);
 
 #endif //CLOX_COMPILER_H
