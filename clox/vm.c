@@ -82,6 +82,9 @@ static InterpretResult run() {
       push(valueType(a op b)); \
     } while(false)
 
+#define READ_SHORT() \
+    (vm.ip += 2, (uint16_t)((vm.ip[-2] << 8) | vm.ip[-1]))
+
     for(;;) {
 #ifdef DEBUG_TRACE_EXECUTION
         printf("          ");
@@ -198,12 +201,31 @@ static InterpretResult run() {
                 vm.stack[slot] = peek(0);
                 break;
             }
+
+            case OP_JUMP_IF_FALSE : {
+                uint16_t offset = READ_SHORT();
+                if (isFalsey(peek(0))) vm.ip += offset;
+                break;
+            }
+
+            case OP_JUMP: {
+                uint16_t offset = READ_SHORT();
+                vm.ip += offset;
+                break;
+            }
+
+            case OP_LOOP: {
+                uint16_t offset = READ_SHORT();
+                vm.ip -= offset;
+                break;
+            }
         }
     }
 #undef READ_BYTE
 #undef READ_CONSTANT
 #undef BINARY_OP
 #undef READ_STRING
+#undef READ_SHORT
 }
 
 InterpretResult interpret(const char* source) {
