@@ -28,6 +28,18 @@ static void freeObject(Obj* object) {
             FREE(ObjString, object);
             break;
         }
+
+        case OBJ_FUNCTION: {
+            ObjFunction* function = (ObjFunction*)object;
+            freeChunk(&function->chunk);
+            FREE(OBJ_FUNCTION, object);
+            break;
+        }
+
+        case OBJ_NATIVE: {
+            FREE(ObjNative, object);
+            break;
+        }
     }
 }
 

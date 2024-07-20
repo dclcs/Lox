@@ -8,10 +8,13 @@
 #include "common.h"
 #include "value.h"
 #include "table.h"
+#include "chunk.h"
 
 #define OBJ_TYPE(value)        (AS_OBJ(value)->type)
 
 typedef enum {
+    OBJ_FUNCTION,
+    OBJ_NATIVE,
     OBJ_STRING,
 } ObjType;
 
@@ -19,6 +22,19 @@ struct Obj {
     ObjType type;
     struct Obj* next;
 };
+
+typedef struct {
+    Obj obj;
+    int arity;
+    Chunk chunk;
+    ObjString* name;
+} ObjFunction;
+
+typedef Value (*NativeFn)(int argCount, Value* args);
+typedef struct  {
+    Obj obj;
+    NativeFn function;
+} ObjNative;
 
 struct ObjString {
     Obj obj;
@@ -30,6 +46,11 @@ struct ObjString {
 #define IS_STRING(value)       isObjType(value, OBJ_STRING)
 #define AS_STRING(value)       ((ObjString*)AS_OBJ(value))
 #define AS_CSTRING(value)      (((ObjString*)AS_OBJ(value))->chars)
+#define IS_FUNCTION(value)     isObjType(value, OBJ_FUNCTION)
+#define AS_FUNCTION(value)      ((ObjFunction*)AS_OBJ(value))
+#define IS_NATIVE(value)       isObjType(value, OBJ_NATIVE)
+#define AS_NATIVE(value) \
+    (((ObjNative*)AS_OBJ(value))->function)
 
 static inline bool isObjType(Value value, ObjType type) {
     return IS_OBJ(value) && AS_OBJ(value)->type == type;
@@ -43,4 +64,8 @@ void printObject(Value value);
 ObjString* takeString(char* chars, int length);
 ObjString* tableFindString(Table* table, const char* chars,
                            int length, uint32_t hash);
+
+ObjFunction* newFunction();
+ObjNative* newNative(NativeFn function);
+
 #endif //CLOX_OBJECT_H

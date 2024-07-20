@@ -6,6 +6,8 @@
 #define CLOX_COMPILER_H
 #include "scanner.h"
 #include "chunk.h"
+#include "object.h"
+
 typedef struct {
     Token current;
     Token previous;
@@ -14,6 +16,6 @@ typedef struct {
 } Parser;
 
 #define UINT8_COUNT (UINT8_MAX + 1)
-bool compile(const char* source, Chunk* chunk);
+ObjFunction* compile(const char* source);
 
 #endif //CLOX_COMPILER_H
