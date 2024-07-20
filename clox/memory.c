@@ -3,6 +3,7 @@
 //
 
 #include <stdlib.h>
+#include <printf.h>
 #include "memory.h"
 #include "object.h"
 #include "vm.h"
@@ -38,6 +39,16 @@ static void freeObject(Obj* object) {
 
         case OBJ_NATIVE: {
             FREE(ObjNative, object);
+            break;
+        }
+
+        case OBJ_CLOSURE: {
+            FREE(OBJ_CLOSURE, object);
+            break;
+        }
+
+        case OBJ_UPVALUE: {
+            printf("upvalue");
             break;
         }
     }
