@@ -17,5 +17,6 @@ typedef struct {
 
 #define UINT8_COUNT (UINT8_MAX + 1)
 ObjFunction* compile(const char* source);
+void markCompilerRoots();
 
 #endif //CLOX_COMPILER_H
